@@ -1,4 +1,4 @@
-// ฟังก์ชันขายหุ้น
+// ฟังก์ชันลงทุน
 #include <iostream>
 using namespace std;
 
@@ -6,7 +6,7 @@ void sellTrade() {
     double amount;
     
     do {
-        cout << "กรุณากรอกราคาหุ้นที่ต้องการขาย (ไม่น้อยกว่า 5000 บาท): ";
+        cout << "กรุณากรอกราคาหุ้นที่ต้องการลงทุน (ไม่น้อยกว่า 5000 บาท): ";
         cin >> amount;
         
         if (amount < 5000) {
@@ -14,7 +14,7 @@ void sellTrade() {
         }
     } while (amount < 5000);
     
-    cout << "คุณได้ทำการขายหุ้นเป็นจำนวน " << amount << " บาท" << endl;
+    cout << "คุณได้ทำการลงทุนเป็นจำนวนเงิน " << amount << " บาท" << endl;
 }
 
 int main() {
