@@ -5,14 +5,14 @@
 #include <string>
 using namespace std;
 
-extern vector<Player> initializePlayers(int numPlayers); // ประกาศ extern
-
 struct Player {
     string name;
     int cash;
     int shares;
     int profit_loss;
 };
+
+extern vector<Player> initializePlayers(int numPlayers); // ประกาศ extern
 
 void displayStatus(const vector<Player>& players, int stockPrice) {
     cout << "\n--- Current Status ---\n";
