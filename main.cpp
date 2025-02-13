@@ -5,6 +5,8 @@
 #include <string>
 using namespace std;
 
+extern vector<Player> initializePlayers(int numPlayers); // ประกาศ extern
+
 struct Player {
     string name;
     int cash;
@@ -74,14 +76,7 @@ int main() {
         return 1;
     }
 
-    vector<Player> players(numPlayers);
-    for (int i = 0; i < numPlayers; ++i) {
-        cout << "Player " << i + 1 << " name: ";
-        cin >> players[i].name;
-        players[i].cash = 50000;
-        players[i].shares = 0;
-        players[i].profit_loss = 0;
-    }
+    vector<Player> players = initializePlayers(numPlayers);  // ใช้ฟังก์ชันนี้แทนการสร้าง players เอง
 
     int stockPrice = 500;
     int rounds = 5;
@@ -101,7 +96,7 @@ int main() {
 
         for (auto& player : players) {
             int totalValue = player.shares * stockPrice;
-            player.profit_loss = totalValue + player.cash - 10000;
+            player.profit_loss = totalValue + player.cash - 50000; // ต้องใช้เงินเริ่มต้น 50000 แทน 10000
         }
     }
 
