@@ -12,7 +12,7 @@ struct Player {
     int profit_loss;
 };
 
-extern vector<Player> initializePlayers(int numPlayers); // ประกาศ extern
+extern vector<Player> initializePlayers(int numPlayers);
 
 void displayStatus(const vector<Player>& players, int stockPrice) {
     cout << "\n--- Current Status ---\n";
