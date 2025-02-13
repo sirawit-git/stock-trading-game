@@ -3,16 +3,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include "player.h"
+
 using namespace std;
-
-struct Player {
-    string name;
-    int cash;
-    int shares;
-    int profit_loss;
-};
-
-extern vector<Player> initializePlayers(int numPlayers);
 
 void displayStatus(const vector<Player>& players, int stockPrice) {
     cout << "\n--- Current Status ---\n";
@@ -51,6 +44,7 @@ void playerTurn(Player& player, int& stockPrice) {
         } else {
             player.cash -= cost;
             player.shares += amount;
+            cout << "\n " << player.name << " bought " << amount << " shares for " << cost << " Baht.\n";
         }
     } else if (choice == 2) {  // Sell Shares
         cout << "How many shares would you like to sell? (Stock price: " << stockPrice << "): ";
@@ -61,9 +55,17 @@ void playerTurn(Player& player, int& stockPrice) {
             int revenue = amount * stockPrice;
             player.cash += revenue;
             player.shares -= amount;
+            cout << "\n " << player.name << " sold " << amount << " shares for " << revenue << " Baht.\n";
         }
+    } else {
+        cout << player.name << " skipped this turn.\n";
     }
+
+    cout << " Status Update for " << player.name << ":\n";
+    cout << " Cash: " << player.cash << " |  Shares: " << player.shares << " | Profit/Loss: " << player.profit_loss << "\n";
+    cout << "---------------------------------------------------\n";
 }
+
 
 int main() {
     srand(time(0));
@@ -76,7 +78,11 @@ int main() {
         return 1;
     }
 
-    vector<Player> players = initializePlayers(numPlayers);  // ใช้ฟังก์ชันนี้แทนการสร้าง players เอง
+    vector<Player> players = initializePlayers(numPlayers);  // Initialize players
+
+    cout << "\n=== Randomizing Starting Money ===\n";
+    
+    randMoney(players);
 
     int stockPrice = 500;
     int rounds = 5;
@@ -96,7 +102,7 @@ int main() {
 
         for (auto& player : players) {
             int totalValue = player.shares * stockPrice;
-            player.profit_loss = totalValue + player.cash - 50000; // ต้องใช้เงินเริ่มต้น 50000 แทน 10000
+            player.profit_loss = totalValue + player.cash - 50000;  // Calculate profit/loss
         }
     }
 
