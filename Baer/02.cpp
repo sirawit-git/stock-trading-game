@@ -18,6 +18,6 @@ void sellTrade() {
 }
 
 int main() {
-    sellTrade(); // เรียกใช้ฟังก์ชันขายสินค้า
+    sellTrade(); // เรียกใช้ฟังก์ชัน
     return 0;
 }
