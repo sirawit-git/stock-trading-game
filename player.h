@@ -9,12 +9,16 @@ using namespace std;
 
 struct Player {
     string name;
-    int cash;
+    double cash;
     int shares;
-    int profit_loss;
+    double profit_loss;
+    double startingMoney;
+    vector<double> trades;
 };
+
 
 vector<Player> initializePlayers(int numPlayers); // Function to create players
 void randMoney(vector<Player>& players); // Function to randomize money
+string getTitle(const Player& player); // Function to get player's title
 
 #endif

@@ -34,3 +34,32 @@ void randMoney(vector<Player>& players) {
              << "| Remaining money : " << players[i].cash << " baht\n";
     }
 }
+
+string getTitle(const Player& player) {
+
+    int highRiskTrades = 0, lowRiskTrades = 0, lossTrades = 0;
+    int totalTrades = player.trades.size();
+    double maxLoss = 0, totalProfit = player.cash + (player.shares * 500) - player.startingMoney;
+    double cashRatio = player.cash / player.startingMoney;
+
+    for (double trade : player.trades) {
+        if (trade >= 6000) highRiskTrades++;
+        if (trade < 3000) lowRiskTrades++;
+        if (trade < 0) {
+            lossTrades++;
+            if (-trade > maxLoss) maxLoss = -trade;
+        }
+    }
+
+    if (player.cash > 150000) return "เศรษฐีใหม่";
+    if (totalProfit >= player.startingMoney) return "พ่อค้าเลือดเย็น";
+    if (highRiskTrades > totalTrades / 2) return "นักเสี่ยงดวง";
+    if (lowRiskTrades == totalTrades) return "ปลอดภัยไว้ก่อน";
+    if (cashRatio >= 0.7) return "สายเก็บออม";
+    if (lossTrades > 0 && player.cash > player.startingMoney) return "นักลงทุนสายถึก";
+    if (player.cash < 5000) return "จากดาดฟ้าสู่ดิน";
+    if (maxLoss >= player.startingMoney * 0.5) return "หมดตัวเพราะไม้เดียว";
+    if (lossTrades > totalTrades / 2) return "เจ้าพ่อดวงเกลือ";
+
+    return "นักเทรดทั่วไป";
+}

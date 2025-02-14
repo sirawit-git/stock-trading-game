@@ -35,7 +35,7 @@ void playerTurn(Player& player, int& stockPrice) {
     cout << "Choice: ";
     cin >> choice;
 
-    if (choice == 1) {  // Buy Shares
+    if (choice == 1) {  // BUY
         cout << "How many shares would you like to buy? (Stock price: " << stockPrice << "): ";
         cin >> amount;
         int cost = amount * stockPrice;
@@ -44,9 +44,9 @@ void playerTurn(Player& player, int& stockPrice) {
         } else {
             player.cash -= cost;
             player.shares += amount;
-            cout << "\n " << player.name << " bought " << amount << " shares for " << cost << " Baht.\n";
+            player.trades.push_back(-cost);  // บันทึกการซื้อเป็นค่าลบ
         }
-    } else if (choice == 2) {  // Sell Shares
+    } else if (choice == 2) {  // SELL
         cout << "How many shares would you like to sell? (Stock price: " << stockPrice << "): ";
         cin >> amount;
         if (amount > player.shares) {
@@ -55,17 +55,10 @@ void playerTurn(Player& player, int& stockPrice) {
             int revenue = amount * stockPrice;
             player.cash += revenue;
             player.shares -= amount;
-            cout << "\n " << player.name << " sold " << amount << " shares for " << revenue << " Baht.\n";
+            player.trades.push_back(revenue);  // บันทึกการขายเป็นค่าบวก
         }
-    } else {
-        cout << player.name << " skipped this turn.\n";
     }
-
-    cout << " Status Update for " << player.name << ":\n";
-    cout << " Cash: " << player.cash << " |  Shares: " << player.shares << " | Profit/Loss: " << player.profit_loss << "\n";
-    cout << "---------------------------------------------------\n";
 }
-
 
 int main() {
     srand(time(0));
@@ -78,7 +71,7 @@ int main() {
         return 1;
     }
 
-    vector<Player> players = initializePlayers(numPlayers);  // Initialize players
+    vector<Player> players = initializePlayers(numPlayers);
 
     cout << "\n=== Randomizing Starting Money ===\n";
     
@@ -108,5 +101,10 @@ int main() {
 
     cout << "\n=== Game Over! ===\n";
     displayStatus(players, stockPrice);
+
+    cout << "\n=== Player Titles ===\n";
+    for (const auto& player : players) {
+    cout << player.name << " is \"" << getTitle(player) << "\"\n";
+    }
     return 0;
 }
