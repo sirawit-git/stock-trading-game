@@ -51,15 +51,15 @@ string getTitle(const Player& player) {
         }
     }
 
-    if (player.cash > 150000) return "เศรษฐีใหม่";
-    if (totalProfit >= player.startingMoney) return "พ่อค้าเลือดเย็น";
-    if (highRiskTrades > totalTrades / 2) return "นักเสี่ยงดวง";
-    if (lowRiskTrades == totalTrades) return "ปลอดภัยไว้ก่อน";
-    if (cashRatio >= 0.7) return "สายเก็บออม";
-    if (lossTrades > 0 && player.cash > player.startingMoney) return "นักลงทุนสายถึก";
-    if (player.cash < 5000) return "จากดาดฟ้าสู่ดิน";
-    if (maxLoss >= player.startingMoney * 0.5) return "หมดตัวเพราะไม้เดียว";
-    if (lossTrades > totalTrades / 2) return "เจ้าพ่อดวงเกลือ";
+    if (player.cash > 150000) return "Overnight millionaire";
+    if (totalProfit >= player.startingMoney) return "The Deal Maker";
+    if (highRiskTrades > totalTrades / 2) return "The Risk Maverick";
+    if (lowRiskTrades == totalTrades) return "The Safety Guru";
+    if (cashRatio >= 0.7) return "The Money Hoarder";
+    if (lossTrades > 0 && player.cash > player.startingMoney) return "The Steady Investor";
+    if (player.cash < 5000) return "The Downfall King/Queen";
+    if (maxLoss >= player.startingMoney * 0.5) return "The One Shot Wonder";
+    if (lossTrades > totalTrades / 2) return "The Jinxed Emperor";
 
-    return "นักเทรดทั่วไป";
+    return "The Daily Trader";
 }
