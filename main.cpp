@@ -108,6 +108,7 @@ int main() {
 
         for (auto& player : players) {
             playerTurn(player, stockPrice);
+            displayStatus(players, stockPrice);
         }
 
         int stockChange = calculateStockChange(graph);
