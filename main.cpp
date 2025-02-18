@@ -1,9 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <fstream>
 #include <ctime>
 #include <string>
 #include "player.h"
+#include "graph.h"
 
 using namespace std;
 
@@ -18,13 +20,23 @@ void displayStatus(const vector<Player>& players, int stockPrice) {
 }
 
 string generateMarketNews() {
-    vector<string> news = {
-        "Good earnings report boosts stocks!",
-        "Economic downturn causes market panic!",
-        "Government announces stimulus package!",
-        "Interest rates increase, impacting stocks!",
-        "Tech sector boom pushes stock prices higher!"
-    };
+    vector<string> news;
+    ifstream file("news.txt"); // เปิดไฟล์ news.txt
+    string line;
+
+    if (!file) {
+        cerr << "Error: Cannot open news.txt!\n";
+        return "No news available.";
+    }
+
+    while (getline(file, line)) {
+        if (!line.empty()) news.push_back(line);
+    }
+    
+    file.close();
+
+    if (news.empty()) return "No news available.";
+
     return news[rand() % news.size()];
 }
 
@@ -35,18 +47,21 @@ void playerTurn(Player& player, int& stockPrice) {
     cout << "Choice: ";
     cin >> choice;
 
-    if (choice == 1) {  // BUY
-        cout << "How many shares would you like to buy? (Stock price: " << stockPrice << "): ";
-        cin >> amount;
-        int cost = amount * stockPrice;
-        if (cost > player.cash) {
-            cout << "Not enough cash!\n";
-        } else {
+    if (choice == 1) {  // Buy Shares
+
+        do{
+            cout << "How many shares would you like to buy? (Stock price: " << stockPrice << "): ";
+            cin >> amount;
+            int cost = amount*stockPrice;
+            if (cost > player.cash) {
+                cout << "Not enough cash!\n";
+            }
+        } while ((amount*stockPrice) > player.cash);
+            int cost = amount*stockPrice;
             player.cash -= cost;
             player.shares += amount;
-            player.trades.push_back(-cost);  // บันทึกการซื้อเป็นค่าลบ
-        }
-    } else if (choice == 2) {  // SELL
+            player.trades.push_back(-cost);
+    } else if (choice == 2) {  // Sell Shares
         cout << "How many shares would you like to sell? (Stock price: " << stockPrice << "): ";
         cin >> amount;
         if (amount > player.shares) {
@@ -55,7 +70,7 @@ void playerTurn(Player& player, int& stockPrice) {
             int revenue = amount * stockPrice;
             player.cash += revenue;
             player.shares -= amount;
-            player.trades.push_back(revenue);  // บันทึกการขายเป็นค่าบวก
+            player.trades.push_back(revenue);
         }
     }
 }
@@ -74,37 +89,45 @@ int main() {
     vector<Player> players = initializePlayers(numPlayers);
 
     cout << "\n=== Randomizing Starting Money ===\n";
-    
     randMoney(players);
 
     int stockPrice = 500;
     int rounds = 5;
 
+    int graph[WIDTH], history[HISTORY_SIZE];
+    loadHistory(history, graph);
+
     for (int round = 1; round <= rounds; ++round) {
         cout << "\n=== Round " << round << " ===\n";
         cout << "Market News: " << generateMarketNews() << "\n";
+
+        generateGraph(graph);
+        displayGraph(graph);
+
         displayStatus(players, stockPrice);
 
         for (auto& player : players) {
             playerTurn(player, stockPrice);
         }
 
-        int change = (rand() % 21) - 10;
-        stockPrice += (stockPrice * change) / 100;
+        int stockChange = calculateStockChange(graph);
+        stockPrice += (stockPrice * stockChange) / 100;
         if (stockPrice < 1) stockPrice = 1;
 
         for (auto& player : players) {
             int totalValue = player.shares * stockPrice;
-            player.profit_loss = totalValue + player.cash - 50000;  // Calculate profit/loss
+            player.profit_loss = totalValue + player.cash - 50000;
         }
     }
+
+    saveHistory(graph);
 
     cout << "\n=== Game Over! ===\n";
     displayStatus(players, stockPrice);
 
     cout << "\n=== Player Titles ===\n";
     for (const auto& player : players) {
-    cout << player.name << " is \"" << getTitle(player) << "\"\n";
+        cout << player.name << " is \"" << getTitle(player) << "\"\n";
     }
     return 0;
 }
