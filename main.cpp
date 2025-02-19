@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <limits>
 #include <fstream>
 #include <ctime>
 #include <string>
@@ -41,39 +42,104 @@ string generateMarketNews() {
 }
 
 void playerTurn(Player& player, int& stockPrice) {
-    int choice, amount;
-    cout << "\n" << player.name << ", what would you like to do?\n";
-    cout << "1. Buy Shares\n2. Sell Shares\n3. Skip Turn\n";
-    cout << "Choice: ";
-    cin >> choice;
+    int choice = 0, amount = 0;
+
+    // ตรวจสอบตัวเลือกให้ถูกต้อง
+    while (true) {
+        cout << "\n" << player.name << ", what would you like to do?\n";
+        cout << "[1] Buy Shares\n[2] Sell Shares\n[3] Skip Turn\n";
+        cout << "Choice: ";
+
+        if (!(cin >> choice)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input! Please enter a number (1, 2, or 3).\n";
+            continue;
+        }
+
+        if (choice == 2 && player.shares == 0) {  
+            cout << "You have no shares to sell! Choose another option.\n";
+            continue; // ให้ผู้เล่นเลือกใหม่แทนที่จะออกจากฟังก์ชัน
+        }
+
+        if (choice >= 1 && choice <= 3) {
+            break; 
+        } else {
+            cout << "Invalid choice! Please enter 1, 2, or 3.\n";
+        }
+    }
 
     if (choice == 1) {  // Buy Shares
-
-        do{
+        while (true) {
             cout << "How many shares would you like to buy? (Stock price: " << stockPrice << "): ";
-            cin >> amount;
-            int cost = amount*stockPrice;
-            if (cost > player.cash) {
-                cout << "Not enough cash!\n";
+            cout << "[Enter 0 to go back]\n";
+            cout << "You want to buy : ";
+
+            if (!(cin >> amount)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input! Enter a valid number.\n";
+                continue;
             }
-        } while ((amount*stockPrice) > player.cash);
-            int cost = amount*stockPrice;
-            player.cash -= cost;
-            player.shares += amount;
-            player.trades.push_back(-cost);
-    } else if (choice == 2) {  // Sell Shares
-        cout << "How many shares would you like to sell? (Stock price: " << stockPrice << "): ";
-        cin >> amount;
-        if (amount > player.shares) {
-            cout << "Not enough shares!\n";
-        } else {
-            int revenue = amount * stockPrice;
-            player.cash += revenue;
-            player.shares -= amount;
-            player.trades.push_back(revenue);
+
+            if (amount == 0) {
+                cout << "Returning to main menu...\n";
+                return playerTurn(player, stockPrice);  // **กลับไปเลือกเมนูใหม่**
+            }
+
+            if (amount < 0) {
+                cout << "Invalid amount! Enter a positive number.\n";
+                continue;
+            }
+
+            int cost = amount * stockPrice;
+            if (cost > player.cash) {
+                cout << "Not enough cash! You only have " << player.cash << " Baht.\n";
+            } else {
+                player.cash -= cost;
+                player.shares += amount;
+                player.trades.push_back(-cost);
+                break;
+            }
+        }
+    } 
+    else if (choice == 2) {  // Sell Shares
+        while (true) {
+            cout << "How many shares would you like to sell? (Stock price: " << stockPrice << "): ";
+            cout << "[Enter 0 to go back]\n";
+            cout << "You want to sell : ";
+
+            if (!(cin >> amount)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input! Enter a valid number.\n";
+                continue;
+            }
+
+            if (amount == 0) {
+                cout << "Returning to main menu...\n";
+                return playerTurn(player, stockPrice);  // **กลับไปเลือกเมนูใหม่**
+            }
+
+            if (amount < 0) {
+                cout << "Invalid amount! Enter a positive number.\n";
+                continue;
+            }
+
+
+            if (amount > player.shares) {
+                cout << "Not enough shares! You only have " << player.shares << " shares.\n";
+            } else {
+                int revenue = amount * stockPrice;
+                player.cash += revenue;
+                player.shares -= amount;
+                player.trades.push_back(revenue);
+                break;
+            }
         }
     }
 }
+
 
 int main() {
     srand(time(0));
