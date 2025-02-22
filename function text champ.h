@@ -31,7 +31,7 @@ vector<string> readFile(const string& filename) {
 int getRandomLineNumber() {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<int> dist(1, 150);
+    uniform_int_distribution<int> dist(1, 127);
     return dist(gen);
 }
 
@@ -64,7 +64,7 @@ int getRandomValue(int lineNumber) {
 }
 
 int main() {
-    vector<string> lines = readFile("new.txt");
+    vector<string> lines = readFile("news.txt");
 
     if (lines.empty()) {
         cerr << "File is empty or not found!" << endl;

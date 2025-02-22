@@ -1,4 +1,4 @@
-#include <iostream> //ฝากไว้ก่อน ยังไม่ได้ใช้งานจริง
+#include <iostream>
 #include <fstream>
 #include <vector>
 #include <random>
@@ -23,17 +23,16 @@ vector<string> readFile(const string& filename) {
     return lines;
 }
 
-
 int getRandomLineNumber() {
-    random_device rd;
-    mt19937 gen(rd());
+    static random_device rd;
+    static mt19937 gen(rd());
     uniform_int_distribution<int> dist(1, 150);
     return dist(gen);
 }
 
 int getRandomValue(int lineNumber) {
-    random_device rd;
-    mt19937 gen(rd());
+    static random_device rd;
+    static mt19937 gen(rd());
 
     if (lineNumber >= 1 && lineNumber <= 50) {
         uniform_int_distribution<int> dist(850, 1300);
@@ -50,17 +49,19 @@ int getRandomValue(int lineNumber) {
     else if (lineNumber >= 71 && lineNumber <= 76) {
         uniform_int_distribution<int> dist(300, 400);
         return dist(gen);
-        } 
+    } 
     else if (lineNumber >= 77 && lineNumber <= 126) {
         uniform_int_distribution<int> dist(200, 300);
         return dist(gen);
     }
-
-    return -1; 
+    else {
+        uniform_int_distribution<int> dist(100, 200);
+        return dist(gen);
+    }
 }
 
 int main() {
-    vector<string> lines = readFile("new.txt");
+    vector<string> lines = readFile("news.txt"); // ใช้ชื่อไฟล์ที่ถูกต้อง
 
     if (lines.empty()) {
         cerr << "File is empty or not found!" << endl;
@@ -69,6 +70,10 @@ int main() {
 
     int randomLine = getRandomLineNumber();
     int randomValue = getRandomValue(randomLine);
+
+    cout << "Random line number: " << randomLine << endl;
+    cout << "Random value: " << randomValue << endl;
+    cout << "News: " << lines[randomLine - 1] << endl; // แสดงข่าวจากบรรทัดที่สุ่มได้
 
     return 0;
 }

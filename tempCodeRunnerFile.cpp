@@ -1,1 +1,1 @@
-dist(gen)
+vector<string> news;
