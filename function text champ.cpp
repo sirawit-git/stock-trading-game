@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream> //ฝากไว้ก่อน ยังไม่ได้ใช้งานจริง
 #include <fstream>
 #include <vector>
 #include <random>
@@ -18,10 +18,11 @@ vector<string> readFile(const string& filename) {
     while (getline(file, line)) {
         lines.push_back(line);
     }
-    
+
     file.close();
     return lines;
 }
+
 
 int getRandomLineNumber() {
     random_device rd;
@@ -35,15 +36,23 @@ int getRandomValue(int lineNumber) {
     mt19937 gen(rd());
 
     if (lineNumber >= 1 && lineNumber <= 50) {
-        uniform_int_distribution<int> dist(750, 1000);
+        uniform_int_distribution<int> dist(850, 1300);
         return dist(gen);
     } 
-    else if (lineNumber >= 51 && lineNumber <= 100) {
-        uniform_int_distribution<int> dist(400, 650);
+    else if (lineNumber >= 51 && lineNumber <= 61) {
+        uniform_int_distribution<int> dist(650, 850);
         return dist(gen);
     } 
-    else if (lineNumber >= 101 && lineNumber <= 150) {
-        uniform_int_distribution<int> dist(250, 350);
+    else if (lineNumber >= 62 && lineNumber <= 70) {
+        uniform_int_distribution<int> dist(400, 600);
+        return dist(gen);
+    }
+    else if (lineNumber >= 71 && lineNumber <= 76) {
+        uniform_int_distribution<int> dist(300, 400);
+        return dist(gen);
+        } 
+    else if (lineNumber >= 77 && lineNumber <= 126) {
+        uniform_int_distribution<int> dist(200, 300);
         return dist(gen);
     }
 
@@ -60,15 +69,6 @@ int main() {
 
     int randomLine = getRandomLineNumber();
     int randomValue = getRandomValue(randomLine);
-    
-    cout << "Random Line Number: " << randomLine << endl;
-    cout << "Random Value: " << randomValue << endl;
-
-    if (randomLine > 0 && randomLine <= lines.size()) {
-        cout << "Line Content: " << lines[randomLine - 1] << endl;
-    } else {
-        cerr << "Random line number is out of range!" << endl;
-    }
 
     return 0;
 }
