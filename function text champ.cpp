@@ -1,27 +1,76 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
-#include <string>
-#include <ctime>
-#include <cstdlib>
-using namespace std;
+#include <random>
 
-string generateMarketNews() {
-    vector<string> news;
-    ifstream file("news.txt"); // เปิดไฟล์ news.txt
-    string line;
+// ฟังก์ชันอ่านไฟล์และเก็บข้อความใน vector
+std::vector<std::string> readFile(const std::string& filename) {
+    std::vector<std::string> lines;
+    std::ifstream file(filename);
+    std::string line;
 
     if (!file) {
-        cerr << "Error: Cannot open news.txt!\n";
-        return "No news available.";
+        std::cerr << "Error: Unable to open file!" << std::endl;
+        return lines;
     }
 
-    while (getline(file, line)) {
-        if (!line.empty()) news.push_back(line);
+    while (std::getline(file, line)) {
+        lines.push_back(line);
     }
     
     file.close();
+    return lines;
+}
 
-    if (news.empty()) return "No news available.";
+// ฟังก์ชันสุ่มหมายเลขบรรทัด 1-150
+int getRandomLineNumber() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dist(1, 150);
+    return dist(gen);
+}
 
-    return news[rand() % news.size()];
+// ฟังก์ชันสุ่มค่าตามช่วงของบรรทัด
+int getRandomValue(int lineNumber) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    if (lineNumber >= 1 && lineNumber <= 50) {
+        std::uniform_int_distribution<int> dist(750, 1000);
+        return dist(gen);
+    } 
+    else if (lineNumber >= 51 && lineNumber <= 100) {
+        std::uniform_int_distribution<int> dist(400, 650);
+        return dist(gen);
+    } 
+    else if (lineNumber >= 101 && lineNumber <= 150) {
+        std::uniform_int_distribution<int> dist(250, 350);
+        return dist(gen);
+    }
+
+    return -1; // กรณีที่ค่าอยู่นอกช่วง
+}
+
+int main() {
+    // อ่านไฟล์ new.txt
+    std::vector<std::string> lines = readFile("new.txt");
+
+    if (lines.empty()) {
+        std::cerr << "File is empty or not found!" << std::endl;
+        return 1;
+    }
+
+    int randomLine = getRandomLineNumber();
+    int randomValue = getRandomValue(randomLine);
+    
+    std::cout << "Random Line Number: " << randomLine << std::endl;
+    std::cout << "Random Value: " << randomValue << std::endl;
+
+    if (randomLine > 0 && randomLine <= lines.size()) {
+        std::cout << "Line Content: " << lines[randomLine - 1] << std::endl;
+    } else {
+        std::cerr << "Random line number is out of range!" << std::endl;
+    }
+
+    return 0;
 }
