@@ -3,7 +3,7 @@
 #include <vector>
 #include <random>
 
-// ฟังก์ชันอ่านไฟล์และเก็บข้อความใน vector
+
 std::vector<std::string> readFile(const std::string& filename) {
     std::vector<std::string> lines;
     std::ifstream file(filename);
@@ -22,7 +22,7 @@ std::vector<std::string> readFile(const std::string& filename) {
     return lines;
 }
 
-// ฟังก์ชันสุ่มหมายเลขบรรทัด 1-150
+
 int getRandomLineNumber() {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -30,7 +30,6 @@ int getRandomLineNumber() {
     return dist(gen);
 }
 
-// ฟังก์ชันสุ่มค่าตามช่วงของบรรทัด
 int getRandomValue(int lineNumber) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -48,11 +47,11 @@ int getRandomValue(int lineNumber) {
         return dist(gen);
     }
 
-    return -1; // กรณีที่ค่าอยู่นอกช่วง
+    return -1; 
 }
 
 int main() {
-    // อ่านไฟล์ new.txt
+   
     std::vector<std::string> lines = readFile("new.txt");
 
     if (lines.empty()) {

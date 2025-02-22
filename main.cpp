@@ -7,6 +7,7 @@
 #include <string>
 #include "player.h"
 #include "graph.h"
+#include "function text champ.cpp"
 
 using namespace std;
 
