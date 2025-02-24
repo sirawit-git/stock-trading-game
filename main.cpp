@@ -5,11 +5,27 @@
 #include <fstream>
 #include <ctime>
 #include <string>
+#include <iomanip>
 #include "player.h"
 #include "graph.h"
 
-
 using namespace std;
+
+void displayStatusWithGraph(const vector<Player>& players, int stockPrice , int graph[]) {
+    cout << "\nStock Graph:\n";
+    generateGraph(graph);
+    displayGraph(graph);
+    cout << endl;  // พิมพ์บรรทัดใหม่
+
+    cout << setw(68) << " " <<  "\n--- Current Status ---\n";
+    cout << setw(48) << " " << "Stock Price: " << stockPrice << " Baht\n";
+    for (const auto& player : players) {
+        cout << setw(48) << " " << player.name << " | Cash: " << player.cash 
+             << " | Shares: " << player.shares
+             << " | Profit/Loss: " << player.profit_loss << "\n";
+    }
+    cout << setw(48) << " " << "----------------------\n";
+}
 
 void displayStatus(const vector<Player>& players, int stockPrice) {
     cout << "\n--- Current Status ---\n";
@@ -167,11 +183,8 @@ int main() {
     for (int round = 1; round <= rounds; ++round) {
         cout << "\n=== Round " << round << " ===\n";
         cout << "Market News: " << generateMarketNews() << "\n";
-
-        generateGraph(graph);
-        displayGraph(graph);
-
-        displayStatus(players, stockPrice);
+        
+        displayStatusWithGraph(players, stockPrice, graph);
 
         for (auto& player : players) {
             playerTurn(player, stockPrice);
