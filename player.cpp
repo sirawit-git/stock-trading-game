@@ -1,4 +1,5 @@
 #include "player.h"
+#include <ctime>
 #include <iostream>
 
 using namespace std;
