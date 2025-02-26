@@ -4,6 +4,7 @@
 #include <ctime>
 #include "graph.h"
 
+
 using namespace std;
 
 void loadHistory(int history[], int graph[]) {
