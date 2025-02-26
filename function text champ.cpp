@@ -5,75 +5,29 @@
 
 using namespace std;
 
-vector<string> readFile(const string& filename) {
-    vector<string> lines;
+pair<string, int> generateMarketNews() {
+    vector<string> news;
     ifstream file("news.txt");
     string line;
 
     if (!file) {
-        cerr << "Error: Unable to open file!" << endl;
-        return lines;
+        cerr << "Error: Cannot open news.txt!\n";
+        return make_pair("No news available.", -1);
     }
 
     while (getline(file, line)) {
-        lines.push_back(line);
+        if (!line.empty()) news.push_back(line);
     }
-
+    
     file.close();
-    return lines;
-}
 
-int getRandomLineNumber() {
-    static random_device rd;
-    static mt19937 gen(rd());
-    uniform_int_distribution<int> dist(1, 150);
-    return dist(gen);
-}
+    if (news.empty()) return make_pair("No news available.", -1);
 
-int getRandomValue(int lineNumber) {
-    static random_device rd;
-    static mt19937 gen(rd());
-
-    if (lineNumber >= 1 && lineNumber <= 50) {
-        uniform_int_distribution<int> dist(850, 1300);
-        return dist(gen);
-    } 
-    else if (lineNumber >= 51 && lineNumber <= 61) {
-        uniform_int_distribution<int> dist(650, 850);
-        return dist(gen);
-    } 
-    else if (lineNumber >= 62 && lineNumber <= 70) {
-        uniform_int_distribution<int> dist(400, 600);
-        return dist(gen);
-    }
-    else if (lineNumber >= 71 && lineNumber <= 76) {
-        uniform_int_distribution<int> dist(300, 400);
-        return dist(gen);
-    } 
-    else if (lineNumber >= 77 && lineNumber <= 126) {
-        uniform_int_distribution<int> dist(200, 300);
-        return dist(gen);
-    }
-    else {
-        uniform_int_distribution<int> dist(100, 200);
-        return dist(gen);
-    }
-}
-
-int main() {
-    vector<string> lines = readFile("news.txt"); // ใช้ชื่อไฟล์ที่ถูกต้อง
-
-    if (lines.empty()) {
-        cerr << "File is empty or not found!" << endl;
-        return 1;
-    }
-
-    int randomLine = getRandomLineNumber();
-    int randomValue = getRandomValue(randomLine);
-
-    cout << "Random line number: " << randomLine << endl;
-    cout << "Random value: " << randomValue << endl;
-    cout << "News: " << lines[randomLine - 1] << endl; // แสดงข่าวจากบรรทัดที่สุ่มได้
-
-    return 0;
+    // สุ่ม
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> dist(0, news.size() - 1);
+    
+    int randomIndex = dist(gen); // ตำแหน่งของข่าวที่สุ่มได้
+    return make_pair(news[randomIndex], randomIndex + 1); // +1 เพราะ index เริ่มจาก 0 แต่บรรทัดเริ่มที่ 1
 }
