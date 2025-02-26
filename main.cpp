@@ -11,6 +11,27 @@
 
 using namespace std;
 
+void displayTextArt() {
+    cout << "\n\n";
+    cout << "*****************************************\n";
+    cout << "*                                       *\n";
+    cout << "*    WELCOME TO THE STOCK MARKET GAME   *\n";
+    cout << "*                                       *\n";
+    cout << "*****************************************\n";
+    cout << "\n\n";
+}
+
+void displayRoundArt(int round) {
+    cout << "\n";
+    cout << "***************************** ROUND " << round << " *****************************\n";
+    cout << "*                                                                       *\n";
+    cout << "*   Let's make some BIG moves in the STOCK MARKET this round!            *\n";
+    cout << "*   The market is full of opportunities. Are you ready to take a risk?    *\n";
+    cout << "*                                                                       *\n";
+    cout << "*************************************************************************\n";
+    cout << "\n";
+}
+
 void displayStatusWithGraph(const vector<Player>& players, int stockPrice , int graph[]) {
     cout << "\nStock Graph:\n";
     generateGraph(graph);
@@ -36,6 +57,7 @@ void displayStatus(const vector<Player>& players, int stockPrice) {
     }
     cout << "----------------------\n";
 }
+
 
 string generateMarketNews() {
     vector<string> news;
@@ -157,9 +179,21 @@ void playerTurn(Player& player, int& stockPrice) {
     }
 }
 
+void displayEndGameArt() {
+    cout << "\n\n";
+    cout << "*********************************************************************\n";
+    cout << "*                                                                   *\n";
+    cout << "*  CONGRATULATIONS! YOU'VE REACHED THE END OF THE STOCK MARKET GAME! *\n";
+    cout << "*  Thank you for playing. Now, let's see who the real investor is!   *\n";
+    cout << "*                                                                   *\n";
+    cout << "*********************************************************************\n";
+    cout << "\n\n";
+}
 
 int main() {
     srand(time(0));
+
+    displayTextArt();
 
     int numPlayers;
     cout << "Number of players (3-5): ";
@@ -181,6 +215,7 @@ int main() {
     loadHistory(history, graph);
 
     for (int round = 1; round <= rounds; ++round) {
+        displayRoundArt(round);
         cout << "\n=== Round " << round << " ===\n";
         cout << "Market News: " << generateMarketNews() << "\n";
         
@@ -204,6 +239,7 @@ int main() {
     saveHistory(graph);
 
     cout << "\n=== Game Over! ===\n";
+    displayEndGameArt();
     displayStatus(players, stockPrice);
 
     cout << "\n=== Player Titles ===\n";
