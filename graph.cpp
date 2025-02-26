@@ -47,11 +47,3 @@ void displayGraph(int graph[]) {
     }
 }
 
-int calculateStockChange(int graph[]) {
-    int last = graph[WIDTH - 1];
-    int prev = graph[WIDTH - 2];
-
-    if (last > prev) return 5;    // ขาขึ้น +5%
-    if (last < prev) return -5;   // ขาลง -5%
-    return 0;                     // ทรงตัว
-}

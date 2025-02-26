@@ -58,27 +58,41 @@ void displayStatus(const vector<Player>& players, int stockPrice) {
     cout << "----------------------\n";
 }
 
+int calculateStockPrice(int newsLine) {
+    if (newsLine >= 1 && newsLine <= 24) return rand() % (1300 - 850 + 1) + 850;
+    if (newsLine >= 25 && newsLine <= 48) return rand() % (850 - 650 + 1) + 650;
+    if (newsLine >= 49 && newsLine <= 97) return rand() % (600 - 400 + 1) + 400;
+    if (newsLine >= 98 && newsLine <= 122) return rand() % (400 - 300 + 1) + 300;
+    if (newsLine >= 123 && newsLine <= 145) return rand() % (300 - 200 + 1) + 200;
+    return 0; // เผื่อกรณีไม่ตรงกับช่วงที่กำหนด
+}
 
-string generateMarketNews() {
-    vector<string> news;
-    ifstream file("news.txt"); // เปิดไฟล์ news.txt
+
+pair<int, string> generateMarketNews() {
+    vector<pair<int, string>> newsList;
+    ifstream file("news_2.txt");
     string line;
-
+    int lineNumber = 0;
+    
     if (!file) {
-        cerr << "Error: Cannot open news.txt!\n";
-        return "No news available.";
-    }
-
-    while (getline(file, line)) {
-        if (!line.empty()) news.push_back(line);
+        cerr << "Error: Cannot open news_2.txt!\n";
+        return {-1, "No news available."};
     }
     
+    while (getline(file, line)) {
+        lineNumber++;
+        if (!line.empty()) {
+            newsList.push_back({lineNumber, line});
+        }
+    }
     file.close();
-
-    if (news.empty()) return "No news available.";
-
-    return news[rand() % news.size()];
+    
+    if (newsList.empty()) return {-1, "No news available."};
+    
+    int randomIndex = rand() % newsList.size();
+    return newsList[randomIndex];
 }
+
 
 void playerTurn(Player& player, int& stockPrice) {
     int choice = 0, amount = 0;
@@ -191,6 +205,7 @@ void displayEndGameArt() {
 }
 
 int main() {
+    pair<int, string> result = generateMarketNews();
     srand(time(0));
 
     displayTextArt();
@@ -217,18 +232,18 @@ int main() {
     for (int round = 1; round <= rounds; ++round) {
         displayRoundArt(round);
         cout << "\n=== Round " << round << " ===\n";
-        cout << "Market News: " << generateMarketNews() << "\n";
         
+        // สุ่มข่าวและกำหนดราคาหุ้น
+        pair<int, string> news = generateMarketNews();
+        cout << "Market News: " << news.second << "\n"; 
+        stockPrice = calculateStockPrice(news.first);
+
         displayStatusWithGraph(players, stockPrice, graph);
 
         for (auto& player : players) {
             playerTurn(player, stockPrice);
             displayStatus(players, stockPrice);
         }
-
-        int stockChange = calculateStockChange(graph);
-        stockPrice += (stockPrice * stockChange) / 100;
-        if (stockPrice < 1) stockPrice = 1;
 
         for (auto& player : players) {
             int totalValue = player.shares * stockPrice;
