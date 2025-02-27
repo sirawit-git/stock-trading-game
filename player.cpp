@@ -3,8 +3,23 @@
 #include <ctime>
 #include <algorithm>
 #include <sstream>
-#include"console.h"  
+#include"console.h" 
+#include "windows.h"
 using namespace std;
+
+void DrawWinnerBanner(const string& winnerName, int color) {
+    // ใส่โค้ดสำหรับวาดแบนเนอร์
+    cout << "🏆 Winner: " << winnerName << " 🏆" << endl;
+}
+
+void DrawrankPlayers(vector<Player>& players) {
+    // ใส่โค้ดสำหรับจัดอันดับผู้เล่น
+    cout << "🏅 Ranking Players 🏅" << endl;
+}
+
+void SetConsoleColor(int color) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
 
 vector<Player> initializePlayers(int numPlayers) {
     vector<Player> players;

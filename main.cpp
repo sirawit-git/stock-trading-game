@@ -8,6 +8,7 @@
 #include <iomanip>
 #include "player.h"
 #include "graph.h"
+#include "console.h"
 
 using namespace std;
 
@@ -59,11 +60,11 @@ void displayStatus(const vector<Player>& players, int stockPrice) {
 }
 
 int calculateStockPrice(int newsLine) {
-    if (newsLine >= 1 && newsLine <= 24) return rand() % (1300 - 850 + 1) + 850;
-    if (newsLine >= 25 && newsLine <= 48) return rand() % (850 - 650 + 1) + 650;
-    if (newsLine >= 49 && newsLine <= 97) return rand() % (600 - 400 + 1) + 400;
-    if (newsLine >= 98 && newsLine <= 122) return rand() % (400 - 300 + 1) + 300;
-    if (newsLine >= 123 && newsLine <= 145) return rand() % (300 - 200 + 1) + 200;
+    if (newsLine >= 1 && newsLine <= 21) return rand() % (1300 - 850 + 1) + 850;
+    if (newsLine >= 22 && newsLine <= 48) return rand() % (850 - 650 + 1) + 650;
+    if (newsLine >= 49 && newsLine <= 85) return rand() % (600 - 400 + 1) + 400;
+    if (newsLine >= 86 && newsLine <= 109) return rand() % (400 - 300 + 1) + 300;
+    if (newsLine >= 110 && newsLine <= 131) return rand() % (300 - 200 + 1) + 200;
     return 0; // เผื่อกรณีไม่ตรงกับช่วงที่กำหนด
 }
 

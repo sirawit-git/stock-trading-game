@@ -9,6 +9,6 @@ void loadHistory(int history[], int graph[]);
 void saveHistory(int graph[]);
 void generateGraph(int graph[]);
 void displayGraph(int graph[]);
-int calculateStockChange(int graph[]);
+
 
 #endif
