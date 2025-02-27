@@ -13,6 +13,16 @@
 
 using namespace std;
 
+void displayTextArt() {
+    cout << "\n\n";
+    cout << "*****************************************\n";
+    cout << "*                                       *\n";
+    cout << "*    WELCOME TO THE TRADE RUCH GAME     *\n";
+    cout << "*                                       *\n";
+    cout << "*****************************************\n";
+    cout << "\n\n";
+}
+
 void displayStatus(const vector<Player>& players, int stockPrice) {
     SetConsoleColor(5);
     cout << "\n--- Current Status ---\n";
@@ -53,6 +63,37 @@ string generateMarketNews() {
     if (news.empty()) return "No news available.";
 
     return news[rand() % news.size()];
+}
+
+// ฟังก์ชันสร้างกรอบ *
+void printWithBorder(const string& title, const string& text, int round) {
+    int maxLength = max(title.length(), text.length()); // คำนวณความกว้างของกรอบ
+    int totalWidth = maxLength + 4; // ขยายขนาดกรอบ (+6 เพื่อเว้นขอบ)
+    
+    // สร้างกรอบ *
+    string border(totalWidth, '*');
+
+    // สร้างข้อความ "ROUND X" ให้อยู่ตรงกลาง
+    string roundText = " ROUND " + to_string(round) + " ";
+    int roundPos = (totalWidth - roundText.length()) / 2; // หาตำแหน่งตรงกลาง
+    string roundLine = border.substr(0, roundPos) + roundText + border.substr(roundPos + roundText.length());
+
+    // แสดงกรอบบน (มี "ROUND X")
+    cout << endl;
+    cout << endl;
+    cout << roundLine << endl;
+
+    // แสดงหัวข้อข่าว
+    cout << "* " << setw(maxLength) << left << title << " *" << endl;
+
+    // เส้นคั่นระหว่างหัวข้อกับข่าว
+    cout << "* " << string(maxLength, '-') << " *" << endl;
+
+    // แสดงข่าว
+    cout << "* " << setw(maxLength) << left << text << " *" << endl;
+
+    // แสดงกรอบล่าง
+    cout << border << endl;
 }
 
 void playerTurn(Player& player, int& stockPrice) {
@@ -189,6 +230,15 @@ int main() {
     
     srand(time(0));
 
+    int round = 1;
+
+    string title = "Today's Market News";
+    string news = generateMarketNews();
+
+    printWithBorder(title, news, round);
+
+    displayTextArt();
+    
     int numPlayers;
 
     while (true){
@@ -216,9 +266,9 @@ int main() {
     int graph[WIDTH], history[HISTORY_SIZE];
     loadHistory(history, graph);
 
-    for (int round = 1; round <= rounds; ++round) {
-        cout << "\n=== Round " << round << " ===\n";//รอบ
-        cout << "Market News: " << generateMarketNews() << "\n"; //ข่าว
+    for (round = 1; round <= rounds; ++round) {
+        
+        printWithBorder(title, news, round); // เรียกใช้ฟังก์ชันสร้างกรอบ
 
         generateGraph(graph);
         displayGraph(graph);
